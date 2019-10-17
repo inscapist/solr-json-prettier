@@ -1,0 +1,1 @@
+(super:(ring:([new OR old] AND king) AND gauntlet:{gold and silver}) AND man)
