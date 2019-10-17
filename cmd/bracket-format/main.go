@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.com/sagittaros/solr-syntax/pkg/ast"
+	"github.com/sagittaros/solr-syntax/pkg/ast"
 )
 
 func main() {
