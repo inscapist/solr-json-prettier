@@ -6,7 +6,7 @@ Solr utilities for pretty print and linting. Zero dependencies
 
 - [x] Pretty print code with nested brackets
 - [x] Lint for mismatched brackets
-- [ ] Additional flags to customize pretty-print behavior
+- [x] Additional flags to customize pretty-print behavior
 
 ### Installation
 
@@ -15,6 +15,11 @@ go install ./...
 ```
 
 ### Usage
+
+```bash
+bracket-format -h
+echo -e <LONG LINE> | bracket-format -max-length 100
+```
 
 Take solr params such as `bq` and `fq`:
 ```

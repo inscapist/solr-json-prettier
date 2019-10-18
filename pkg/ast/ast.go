@@ -2,13 +2,14 @@ package ast
 
 import (
 	"errors"
+	"strings"
 )
 
 var (
 	ErrMismatchBrackets = errors.New("Mismatch brackets")
 )
 
-func Build(code string) (*Node, error) {
+func Build(code string, maxLineLength int) (*Node, error) {
 	var (
 		nodes    *NodeStack
 		brackets *BracketStack
@@ -22,9 +23,12 @@ func Build(code string) (*Node, error) {
 		switch {
 		case bracketContains(OpenBrackets, c):
 			brackets.Push(c)
-			node := &Node{Label: string(buf)}
-			if last != nil {
-				last.Children = append(last.Children, node)
+			var node *Node
+			for _, token := range tokenizedLabel(buf, maxLineLength) {
+				node = &Node{Label: token}
+				if last != nil {
+					last.Children = append(last.Children, node)
+				}
 			}
 			nodes.Push(node)
 			node.ChildrenBrackets[0] = c
@@ -36,7 +40,9 @@ func Build(code string) (*Node, error) {
 			}
 			last.ChildrenBrackets[1] = c
 			if len(buf) > 0 {
-				last.Children = append(last.Children, &Node{Label: string(buf)})
+				for _, token := range tokenizedLabel(buf, maxLineLength) {
+					last.Children = append(last.Children, &Node{Label: token})
+				}
 			}
 			nodes.Pop()
 			buf = nil
@@ -45,4 +51,12 @@ func Build(code string) (*Node, error) {
 		}
 	}
 	return last, nil
+}
+
+func tokenizedLabel(buf []rune, maxLineLength int) []string {
+	label := string(buf)
+	if len(label) > maxLineLength {
+		return strings.Fields(label)
+	}
+	return []string{label}
 }
